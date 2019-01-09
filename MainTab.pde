@@ -1,5 +1,5 @@
 //Main tab for the program
-int no_of_birds=500;
+int no_of_birds=700;
 
 int counter=0;
 int gen_count=0;
@@ -20,39 +20,39 @@ void setup(){
 }
 //---------------------------------------------------------------------------------------
 void draw(){
-  background(0);
   
-  if(counter%200==0)
-  {
-    Pipe p=new Pipe();
-    pipes.add(p);
-    
-  }
-  counter++;
-  for(int i=pipes.size()-1;i>=0;i--){
-    Pipe p=pipes.get(i);
-    p.update();
-    p.show();
-    for(int j=birds.size()-1;j>=0;j--){
-      if(p.hit(birds.get(j))){
-        birds.get(j).dead=true;
+    background(0);
+      if(counter%200==0)
+      {
+        Pipe p=new Pipe();
+        pipes.add(p);
+        
       }
-    }
-    if(p.offScreen())
-    {
-      pipes.remove(i);
-    }
-  }
-    for(int j=birds.size()-1;j>=0;j--){
-       Bird b=birds.get(j);
-       if(!b.dead)
-       {
-           b.think(pipes);
-           b.update();
-           b.show();
-       }
-    }
-    if(ifAllDead()) Restart();
+      counter++;
+      for(int i=pipes.size()-1;i>=0;i--){
+        Pipe p=pipes.get(i);
+        p.update();
+        p.show();
+        for(int j=birds.size()-1;j>=0;j--){
+          if(p.hit(birds.get(j))){
+            birds.get(j).dead=true;
+          }
+        }
+        if(p.offScreen())
+        {
+          pipes.remove(i);
+        }
+      }
+        for(int j=birds.size()-1;j>=0;j--){
+           Bird b=birds.get(j);
+           if(!b.dead)
+           {
+               b.think(pipes);
+               b.update();
+               b.show();
+           }
+        }
+        if(ifAllDead()) Restart();
 }
 //------------------------------------------------------------
 boolean ifAllDead(){
@@ -68,6 +68,7 @@ void Restart(){
     pipes.clear();
     counter=0; 
     gen_count++;
+  
 }
 //------------------------------------------------------------------------------------------------------
 //void keyPressed(){
@@ -102,13 +103,15 @@ int ParentSelection(ArrayList<Bird> birds)
 ArrayList<Bird> nextGeneration(ArrayList<Bird> birds){
     ArrayList<Bird> newBirds=new ArrayList<Bird>();
     calculateFitness(birds);
-    for(int i=0;i<birds.size();i++){
-      println("fitness of "+i+": "+birds.get(i).fitness);
-    }
+    //for(int i=0;i<birds.size();i++){
+    //  println("fitness of "+i+": "+birds.get(i).fitness);
+    //}
     for(int i=0;i<birds.size();i++){
       Bird parent=birds.get(ParentSelection(birds));
       Neural_Network  brains=parent.getBrain();
+     // brains.printNN();
       Bird child=new Bird(brains);
+      //child.brain.printNN();
       child.mutate();
       newBirds.add(child);
     }

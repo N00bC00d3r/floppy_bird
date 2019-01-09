@@ -24,7 +24,7 @@ public class Bird{
     this.ypos=height/2;
     this.velocity=0;
     this.size=32;
-    this.brain=new Neural_Network(5,5,2);
+    this.brain=new Neural_Network(5,64,2);
     this.score=0.0;
     this.fitness=0.0;
   }
@@ -47,7 +47,7 @@ public class Bird{
     inputs[1]=closest_pipe.top_fin/height;
     inputs[2]=closest_pipe.bottom_start/height;
     inputs[3]=this.ypos/height;
-    inputs[4]=this.velocity/10;
+    inputs[4]=this.velocity/20;
     double[] outputs=brain.feedforward(inputs);
     if(outputs[0]>outputs[1])
     this.up();
@@ -59,13 +59,9 @@ public class Bird{
     this.velocity+=gravity;
     this.velocity*=0.8;
     this.ypos+=this.velocity;
-    if(this.ypos>height || this.ypos<=0)
+    if(this.ypos>height || this.ypos<0)
     {
         dead=true;
-    }
-    if(this.ypos<0)
-    {
-      this.ypos=0;
     }
   }
 //----------------------------------------------------------------------------------------------------------
@@ -80,7 +76,7 @@ public class Bird{
   }
 //------------------------------------------------------------------------------------------------------------
   void mutate(){
-    this.brain.mutate(0.01);
+    this.brain.mutate(0.1);
   }
 //------------------------------------------------------------------------------------------------------------
   public Neural_Network getBrain(){
