@@ -1,7 +1,7 @@
 class Neural_Network{
   int input_layer_no,hidden_layer_no,output_layer_no;
   Matrix weight_ih,weight_ho,bias_ih,bias_ho;
-  double learning_rate=0.01;
+  double learning_rate=0.1;
 //----------------------------------------------------------------------------------------
   Neural_Network(int inputs,int hidden,int output){
     this.input_layer_no=inputs;
@@ -54,7 +54,8 @@ class Neural_Network{
     Matrix c=new Matrix(a.rows,a.cols);
     for(int i=0;i<a.rows;i++){
         for(int j=0;j<a.cols;j++){
-          c.data[i][j]=a.data[i][j]+random(-0.1,0.1);
+          c.data[i][j]=a.data[i][j]+randomGaussian();
+          
         }
     }
     return c;

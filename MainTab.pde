@@ -1,8 +1,15 @@
 //Main tab for the program
-int no_of_birds=700;
+int no_of_birds=1000;
 
 int counter=0;
+int cycles=1;
 int gen_count=0;
+
+
+Button myButton=new Button(700,100);
+//Button load=new Button(700,50);
+
+//Bird goat=new Bird();
 ArrayList<Bird> birds;
 ArrayList<Pipe> pipes;
 //--------------------------------------------------------------------------------------
@@ -21,8 +28,10 @@ void setup(){
 //---------------------------------------------------------------------------------------
 void draw(){
   
-    background(0);
-      if(counter%200==0)
+  for(int n=0;n<cycles;n++){
+     
+    //Main game logic
+      if(counter%300==0)
       {
         Pipe p=new Pipe();
         pipes.add(p);
@@ -32,7 +41,7 @@ void draw(){
       for(int i=pipes.size()-1;i>=0;i--){
         Pipe p=pipes.get(i);
         p.update();
-        p.show();
+       // p.show();
         for(int j=birds.size()-1;j>=0;j--){
           if(p.hit(birds.get(j))){
             birds.get(j).dead=true;
@@ -49,10 +58,26 @@ void draw(){
            {
                b.think(pipes);
                b.update();
-               b.show();
+               //b.show();
            }
         }
         if(ifAllDead()) Restart();
+        
+  }      
+      
+    //all the drawing stuff
+     background(0);
+    for(Bird b :birds){
+      if(!b.dead)
+      {
+          b.show();
+      }
+    }
+    for(Pipe p:pipes){
+      p.show();
+    }
+    myButton.show(0,255,0);
+    //load.show(0,0,255);
 }
 //------------------------------------------------------------
 boolean ifAllDead(){
@@ -63,7 +88,11 @@ boolean ifAllDead(){
 }
 //---------------------------------------------------------------------------------------------------
 void Restart(){
-  
+    //for(Bird b: birds){
+    //  if(b.score>goat.score){
+    //    goat=b;
+    //  }
+    //}
     birds=nextGeneration(birds);
     pipes.clear();
     counter=0; 
@@ -119,11 +148,21 @@ ArrayList<Bird> nextGeneration(ArrayList<Bird> birds){
 }
 //-----------------------------------------------------------------------------------------------------
 void mousePressed(){
-  int count=0;
-  for(Bird b: birds){
-    if(!b.dead) count++;
-    else println("score :"+b.score);
+  if(myButton.hover()){
+    if(cycles==1) cycles=100;
+    else cycles=1;
   }
-  println(count+" gen:"+gen_count);
+  //else if(load.hover()){
+  //  birds.clear();
+  //  Bird greatest=new Bird(goat.getBrain());
+  //  birds.add(greatest);
+  //  println(greatest.dead);
+  //  pipes.clear();
+  //  counter=0; 
+    
+  //}
+  println("gen:"+gen_count);
+  //println("goat_score:"+goat.score);
+ 
 }
 //---------------------------------------------------------------------------------------------------------
