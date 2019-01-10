@@ -63,9 +63,9 @@ class Neural_Network{
   }
 //-------------------------------------------------------------------------------------------------
 void printNN(){
-  weight_ih.printMatrix();
+  //weight_ih.printMatrix();
   weight_ho.printMatrix();
-  bias_ih.printMatrix();
+  //bias_ih.printMatrix();
   bias_ho.printMatrix();
   
 }

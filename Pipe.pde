@@ -37,17 +37,17 @@ class Pipe{
   }
 //--------------------------------------------------------------------------------------------------------------
   boolean hit(Bird b){
-    if(((b.ypos>0 && b.ypos<=this.top_fin)||
-    (b.ypos>=this.bottom_start && b.ypos<=height))&&
-    (b.xpos>=this.xpos && b.xpos<=this.xpos+this.wid))
-    return true;
-    else return false;
-    //if(collisionDetection(xpos,0,wid,top_fin,b.xpos,b.ypos,b.size) || 
-    //collisionDetection(xpos,bottom_start,wid,height-bottom_start,b.xpos,b.ypos,b.size))
-    //{
-    //    return true;
-    //}
+    //if(((b.ypos>0 && b.ypos<=this.top_fin)||
+    //(b.ypos>=this.bottom_start && b.ypos<=height))&&
+    //(b.xpos>=this.xpos && b.xpos<=this.xpos+this.wid))
+    //return true;
     //else return false;
+    if(collisionDetection(xpos,0,wid,top_fin,b.xpos,b.ypos,b.size) || 
+    collisionDetection(xpos,bottom_start,wid,height-bottom_start,b.xpos,b.ypos,b.size))
+    {
+        return true;
+    }
+    else return false;
   }
 //-----------------------------------------------------------------------------------------------------------------
   boolean collisionDetection

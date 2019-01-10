@@ -1,33 +1,35 @@
 //Main tab for the program
-int no_of_birds=1000;
+int no_of_birds=600;
 
 int counter=0;
 int cycles=1;
 int gen_count=0;
+double best_score=0;
+boolean training_mode=true; 
+boolean dontDraw=false;
 
-
+Neural_Network goat_brain;
 Button myButton=new Button(700,100);
-//Button load=new Button(700,50);
+Button load=new Button(700,50);
+Button train=new Button(700,150);
 
-//Bird goat=new Bird();
+//Bird goat;
 ArrayList<Bird> birds;
+ArrayList<Bird> savedBirds;
 ArrayList<Pipe> pipes;
 //--------------------------------------------------------------------------------------
 void setup(){
-  size(800,600);
+  size(1000,600);
   birds=new ArrayList<Bird>();
-  for(int i=0;i<no_of_birds;i++){
-    Bird b;
-    b=new Bird();
-    birds.add(b);
-  }
+  savedBirds=new ArrayList<Bird>();
+  
   pipes=new ArrayList<Pipe>();
-  //Pipe p=new Pipe();
-  //pipes.add(p);
+  init();
 }
 //---------------------------------------------------------------------------------------
 void draw(){
-  
+  if(!dontDraw){
+    
   for(int n=0;n<cycles;n++){
      
     //Main game logic
@@ -61,7 +63,18 @@ void draw(){
                //b.show();
            }
         }
-        if(ifAllDead()) Restart();
+       for(Bird b: birds){
+          if(b.score>best_score){
+            goat_brain=b.brain;
+            best_score=b.score;
+          }
+        }
+        if(ifAllDead() && training_mode) Restart();
+        if(!training_mode && ifAllDead())
+        {
+          dontDraw=true;
+        }
+        else dontDraw=false;
         
   }      
       
@@ -77,7 +90,22 @@ void draw(){
       p.show();
     }
     myButton.show(0,255,0);
-    //load.show(0,0,255);
+    load.show(0,0,255);
+    train.show(255,0,0);
+    textSize(16);
+    fill(0,0,255);
+    text("Load best",725,54);
+    fill(0,255,0);
+    text("Speed/Slow",725,104);
+    fill(255,0,0);
+    text("Train Hard",725,154);   
+    String generation=str(gen_count);
+    String record= str((int)best_score);
+    textSize(32);
+    fill(0,255,0);
+    text("Generation: "+generation,10,30);
+    text("best score: "+record,10,60);
+  }
 }
 //------------------------------------------------------------
 boolean ifAllDead(){
@@ -88,23 +116,13 @@ boolean ifAllDead(){
 }
 //---------------------------------------------------------------------------------------------------
 void Restart(){
-    //for(Bird b: birds){
-    //  if(b.score>goat.score){
-    //    goat=b;
-    //  }
-    //}
+
     birds=nextGeneration(birds);
     pipes.clear();
     counter=0; 
     gen_count++;
   
 }
-//------------------------------------------------------------------------------------------------------
-//void keyPressed(){
-//  if(key==' '){
-//      birds.get(0).up();
-//  }
-//}
 //-------------------------------------------------------------------------------------------------------
 void calculateFitness(ArrayList<Bird> birds){
     double sum=0.0;
@@ -132,15 +150,11 @@ int ParentSelection(ArrayList<Bird> birds)
 ArrayList<Bird> nextGeneration(ArrayList<Bird> birds){
     ArrayList<Bird> newBirds=new ArrayList<Bird>();
     calculateFitness(birds);
-    //for(int i=0;i<birds.size();i++){
-    //  println("fitness of "+i+": "+birds.get(i).fitness);
-    //}
+
     for(int i=0;i<birds.size();i++){
       Bird parent=birds.get(ParentSelection(birds));
-      Neural_Network  brains=parent.getBrain();
-     // brains.printNN();
+      Neural_Network  brains=parent.brain;
       Bird child=new Bird(brains);
-      //child.brain.printNN();
       child.mutate();
       newBirds.add(child);
     }
@@ -152,17 +166,40 @@ void mousePressed(){
     if(cycles==1) cycles=100;
     else cycles=1;
   }
-  //else if(load.hover()){
-  //  birds.clear();
-  //  Bird greatest=new Bird(goat.getBrain());
-  //  birds.add(greatest);
-  //  println(greatest.dead);
-  //  pipes.clear();
-  //  counter=0; 
+  else if(load.hover()){
+      for(Bird b: birds){
+        savedBirds.add(b);
+      }
+      birds.clear();
+      Neural_Network nn=goat_brain;
+      Bird newB=new Bird(nn);
+      birds.add(newB);
+      pipes.clear();
+      counter=0; 
+      training_mode=false;
+      dontDraw=false;
     
-  //}
-  println("gen:"+gen_count);
-  //println("goat_score:"+goat.score);
+  }
+  else if(train.hover()){
+    if(!training_mode){
+      
+        birds.clear();
+        for(Bird b:savedBirds){
+          birds.add(b);
+        }
+        Restart();
+        dontDraw=false;
+        training_mode=true;
+        //init();
+    }
+  }
  
 }
 //---------------------------------------------------------------------------------------------------------
+void init(){
+    for(int i=0;i<no_of_birds;i++){
+    Bird b;
+    b=new Bird();
+    birds.add(b);
+  }
+}

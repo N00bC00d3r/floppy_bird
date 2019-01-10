@@ -14,9 +14,37 @@ public class Bird{
     this.ypos=height/2;
     this.velocity=0;
     this.size=32;
-    this.brain=brain;
     this.score=0.0;
     this.fitness=0.0;
+    this.brain=new Neural_Network(brain.input_layer_no,brain.hidden_layer_no,brain.output_layer_no);
+    //------------------------------
+    for(int i=0;i<this.brain.weight_ih.rows;i++)
+    {
+      for(int j=0;j<this.brain.weight_ih.cols;j++){
+        this.brain.weight_ih.data[i][j]=brain.weight_ih.data[i][j];
+      }
+    }
+    //----------------------------
+    for(int i=0;i<this.brain.bias_ih.rows;i++)
+    {
+      for(int j=0;j<this.brain.bias_ih.cols;j++){
+        this.brain.bias_ih.data[i][j]=brain.bias_ih.data[i][j];
+      }
+    }
+    //-----------------------------
+    for(int i=0;i<this.brain.weight_ho.rows;i++)
+    {
+      for(int j=0;j<this.brain.weight_ho.cols;j++){
+        this.brain.weight_ho.data[i][j]=brain.weight_ho.data[i][j];
+      }
+    }
+    //--------------------------------------
+    for(int i=0;i<this.brain.bias_ho.rows;i++)
+    {
+      for(int j=0;j<this.brain.bias_ho.cols;j++){
+        this.brain.bias_ho.data[i][j]=brain.bias_ho.data[i][j];
+      }
+    }
   }
 //-------------------------------------------------------------------------------------------------------------
   Bird(){
@@ -77,10 +105,10 @@ public class Bird{
   }
 //------------------------------------------------------------------------------------------------------------
   void mutate(){
-    this.brain.mutate(0.3);
+    this.brain.mutate(0.1);
   }
 //------------------------------------------------------------------------------------------------------------
-  public Neural_Network getBrain(){
-    return this.brain;
-  }
+  //public Neural_Network getBrain(){
+  //  return this.brain;
+  //}
 }
